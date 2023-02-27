@@ -18,14 +18,6 @@ function Download() {
 
   const Downloader = () => {
     setShowDownload(true);
-    chrome.tabs.query(
-      { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
-      (tabs) => {
-        const url = tabs[0].url;
-        const downloadUrl = `${URL}/download_chrome_ex?videoUrl=${url}/${value}`;
-        chrome.tabs.create({ url: downloadUrl });
-      }
-    );
     chrome.notifications.create(
       "Your Download has started",
       {
@@ -37,13 +29,25 @@ function Download() {
       },
       function callback() {}
     );
+    chrome.tabs.query(
+      { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
+      (tabs) => {
+        const url = tabs[0].url;
+        const downloadUrl = `${URL}/download_chrome_ex?videoUrl=${url}/${value}`;
+        chrome.tabs.create({ url: downloadUrl });
+      }
+    );
+
     setSucess(true);
   };
 
   return (
     <>
-      <div className="flex justify-center">
-        <label>
+      <div className="flex flex-col items-center gap-y-1 gap-x-4">
+        <div className="text-center font-extralight text-red-700">
+          Choose any file format
+        </div>
+        <label className="bg-red-400 p-1 rounded-xl w-[60px]">
           <input
             type="radio"
             checked={value === "mp4"}
@@ -51,15 +55,15 @@ function Download() {
           />
           mp4
         </label>
-        <label>
-          <label>
-            <input
-              type="radio"
-              checked={value === "flv"}
-              onChange={handleFLVChange}
-            />
-            flv
-          </label>
+        <label className="bg-red-400 p-1 rounded-xl w-[60px]">
+          <input
+            type="radio"
+            checked={value === "flv"}
+            onChange={handleFLVChange}
+          />
+          flv
+        </label>
+        <label className="bg-red-400 p-1 rounded-xl w-[60px]">
           <input
             type="radio"
             checked={value === "mov"}
@@ -68,12 +72,24 @@ function Download() {
           mov
         </label>
         {!showDownload ? (
-          <button onClick={Downloader}>Download</button>
+          <button
+            className="bg-red-400 mt-8 px-4 py-2 rounded-xl text-lg"
+            onClick={Downloader}
+          >
+            Download
+          </button>
         ) : (
-          <div>Downloading video...</div>
+          <div className="bg-green-400 p-1 rounded-xl">
+            Downloading video...
+          </div>
         )}
       </div>
-      {sucess && <div> Video Downloaded sucessfully</div>}
+      {sucess && (
+        <div className="bg-green-400 p-1 rounded-xl">
+          {" "}
+          Video Downloaded sucessfully
+        </div>
+      )}
     </>
   );
 }
