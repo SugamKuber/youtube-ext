@@ -2,8 +2,12 @@ const http = require("http");
 const ytdl = require("ytdl-core");
 const url = require("url");
 
-const app = http.createServer((req, res) => {
-    const currentURL = req.url;
+const app = http
+  .createServer((req, res) => {
+    const realURL = req.url;
+    const mainurl = realURL.split("/");
+    const format = mainurl[mainurl.length - 1];
+    currentURL = realURL.slice(0, -4);
     const pathname = url.parse(currentURL, true).pathname;
     const queryData = url.parse(currentURL, true).query;
     const videoUrl = queryData.videoUrl;
@@ -18,10 +22,10 @@ const app = http.createServer((req, res) => {
         res.end("This is not a YouTube website");
       } else {
         res.writeHead(200, {
-          "Content-Disposition": 'attachment; filename="video.mp4"',
+          "Content-Disposition": `attachment; filename="video.${format}"`,
         });
         ytdl(videoUrl, {
-          format: "mp4",
+          format: format,
         }).pipe(res);
       }
     } else {
