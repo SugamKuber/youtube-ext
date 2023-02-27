@@ -3,6 +3,8 @@ const URL = "http://127.0.0.1:8080";
 
 function Download() {
   const [value, setValue] = React.useState("mp4");
+  const [showDownload, setShowDownload] = React.useState(false);
+  const [sucess, setSucess] = React.useState(false);
 
   const handleFLVChange = () => {
     setValue("flv");
@@ -15,6 +17,7 @@ function Download() {
   };
 
   const Downloader = () => {
+    setShowDownload(true);
     chrome.tabs.query(
       { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
       (tabs) => {
@@ -23,6 +26,18 @@ function Download() {
         chrome.tabs.create({ url: downloadUrl });
       }
     );
+    chrome.notifications.create(
+      "Your Download has started",
+      {
+        type: "basic",
+        iconUrl: "...",
+        title: "Youtube video downloader",
+        message: "Youtube video downloader started, please check downloads",
+        buttons: [{ title: "Mark" }, { title: "Ignore" }],
+      },
+      function callback() {}
+    );
+    setSucess(true);
   };
 
   return (
@@ -52,8 +67,13 @@ function Download() {
           />
           mov
         </label>
-        <button onClick={Downloader}>Download</button>
+        {!showDownload ? (
+          <button onClick={Downloader}>Download</button>
+        ) : (
+          <div>Downloading video...</div>
+        )}
       </div>
+      {sucess && <div> Video Downloaded sucessfully</div>}
     </>
   );
 }
