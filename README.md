@@ -1,6 +1,6 @@
 # youtube-ext
 
-###USER Manual
+## USER Manual
 
 1. git clone the repo
 2. cd client
