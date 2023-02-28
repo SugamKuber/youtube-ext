@@ -16,3 +16,5 @@
 12. Click on download, The video gets downloaded
 
 - Choosing Resolutions Incomplete
+
+![image](https://user-images.githubusercontent.com/86460476/221782286-e0c1e585-5839-4839-95a6-3c9c0aa9ada1.png)
